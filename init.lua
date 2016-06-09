@@ -36,7 +36,7 @@ minetest.register_node("invisibility:potion", {
 		local pos = user:getpos()
 
 		-- make player invisible
-		invisible(user)
+		invisible(user, true)
 
 		-- play sound
 		minetest.sound_play("pop", {
@@ -61,7 +61,7 @@ minetest.register_node("invisibility:potion", {
 			if user:getpos() then
 
 				-- show aready hidden player
-				invisible(user)
+				invisible(user, nil)
 
 				-- play sound
 				minetest.sound_play("pop", {
@@ -93,17 +93,17 @@ minetest.register_craft( {
 
 -- invisibility function
 
-invisible = function(player)
+invisible = function(player, toggle)
 
 	if not player then return false end
 
 	local name = player:get_player_name()
 
-	invisibility[name] = not invisibility[name]
+	invisibility[name] = toggle
 
 	local prop
 
-	if invisibility[name] then
+	if toggle == true then
 
 		-- hide player and name tag
 		prop = {
@@ -151,8 +151,15 @@ minetest.register_chatcommand("vanish", {
 			return false, "Player " .. param .. " is not online!"
 		end
 
-		-- hide player entered (default to player using command if blank)
-		invisible( minetest.get_player_by_name(name) )
+		local player = minetest.get_player_by_name(name)
+
+		-- hide / show player
+		if invisibility[name] then
+
+			invisible(player, nil)
+		else
+			invisible(player, true)
+		end
 
 	end
 })
