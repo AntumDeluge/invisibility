@@ -38,25 +38,41 @@ minetest.register_node("invisibility:potion", {
 
 		local pos = user:getpos()
 
-		-- hide player
+		-- make player invisible
 		invisible(user)
 
+		-- play sound
 		minetest.sound_play("pop", {
 			pos = pos,
 			gain = 1.0,
 			max_hear_distance = 5
 		})
 
-		-- show again 5 minutes later
+		-- display 10 second warning
+		minetest.after(290, function()
+
+			if user:getpos() then
+
+				minetest.chat_send_player(user:get_player_name(),
+					">>> You have 10 seconds before invisibility wears off!")
+			end
+		end)
+
+		-- make player visible 5 minutes later
 		minetest.after(300, function()
 
-			invisible(user)
+			if user:getpos() then
 
-			minetest.sound_play("pop", {
-				pps = pos,
-				gain = 1.0,
-				max_hear_distance = 5
-			})
+				-- show aready hidden player
+				invisible(user)
+
+				-- play sound
+				minetest.sound_play("pop", {
+					pps = pos,
+					gain = 1.0,
+					max_hear_distance = 5
+				})
+			end
 		end)
 
 		-- take item
@@ -70,10 +86,12 @@ minetest.register_node("invisibility:potion", {
 	end,
 })
 
+-- craft recipe
+
 minetest.register_craft( {
 	output = "invisibility:potion",
 	type = "shapeless",
-	recipe = {"default:nyancat", "vessels:glass_bottle"},
+	recipe = {"default:nyancat_rainbow", "vessels:glass_bottle"},
 })
 
 -- invisibility function
