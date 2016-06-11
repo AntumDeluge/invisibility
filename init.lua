@@ -56,7 +56,7 @@ minetest.register_node("invisibility:potion", {
 		end)
 
 		-- make player visible 5 minutes later
-		minetest.after(300, function(pos)
+		minetest.after(300, function()
 
 			if user:getpos() then
 
@@ -65,12 +65,12 @@ minetest.register_node("invisibility:potion", {
 
 				-- play sound
 				minetest.sound_play("pop", {
-					pps = pos,
+					pos = pos,
 					gain = 1.0,
 					max_hear_distance = 5
 				})
 			end
-		end, pos)
+		end)
 
 		-- take item
 		if not minetest.setting_getbool("creative_mode") then
