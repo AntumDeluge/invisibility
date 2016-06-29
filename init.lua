@@ -1,6 +1,8 @@
 
 invisibility = {}
 
+local effect_time = 300 -- 5 minutes
+
 -- reset player invisibility if they go offline
 
 minetest.register_on_leaveplayer(function(player)
@@ -21,7 +23,6 @@ minetest.register_node("invisibility:potion", {
 	inventory_image = "invisibility_potion.png",
 	wield_image = "invisibility_potion.png",
 	paramtype = "light",
-	stack_max = 1,
 	is_ground_content = false,
 	walkable = false,
 	selection_box = {
@@ -34,6 +35,17 @@ minetest.register_node("invisibility:potion", {
 	on_use = function(itemstack, user)
 
 		local pos = user:getpos()
+		local name = user:get_player_name()
+
+		-- are we already invisible?
+		if invisibility[name] then
+
+			minetest.chat_send_player(name,
+				">>> You are already invisible!")
+
+				return itemstack
+		end
+
 
 		-- make player invisible
 		invisible(user, true)
@@ -46,19 +58,21 @@ minetest.register_node("invisibility:potion", {
 		})
 
 		-- display 10 second warning
-		minetest.after(290, function()
+		minetest.after(effect_time - 10, function()
 
-			if user:getpos() then
+			if invisibility[name]
+			and user:getpos() then
 
-				minetest.chat_send_player(user:get_player_name(),
+				minetest.chat_send_player(name,
 					">>> You have 10 seconds before invisibility wears off!")
 			end
 		end)
 
 		-- make player visible 5 minutes later
-		minetest.after(300, function()
+		minetest.after(effect_time, function()
 
-			if user:getpos() then
+			if invisibility[name]
+			and user:getpos() then
 
 				-- show aready hidden player
 				invisible(user, nil)
@@ -72,12 +86,29 @@ minetest.register_node("invisibility:potion", {
 			end
 		end)
 
-		-- take item
+		-- take potion, return empty bottle (and rest of potion stack)
 		if not minetest.setting_getbool("creative_mode") then
 
-			itemstack:take_item()
+			local item_count = user:get_wielded_item():get_count()
+			local inv = user:get_inventory()
+			local giving_back = "vessels:glass_bottle"
 
-			return {name = "vessels:glass_bottle"}
+			if inv and item_count > 1 then
+
+				if inv:room_for_item("main", {name = "vessels:glass_bottle"}) then
+
+					inv:add_item("main", {name = "vessels:glass_bottle"})
+				else
+					pos.y = pos.y + 1
+
+					minetest.add_item(pos, {name = "vessels:glass_bottle"})
+				end
+
+				giving_back = "invisibility:potion " .. tostring(item_count - 1)
+
+			end
+
+			return ItemStack(giving_back)
 		end
 
 	end,
