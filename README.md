@@ -14,4 +14,3 @@ Changelog:
  - 0.1 - Initial Upload
  - 0.2 - Added error checking and a 10 second warning before becoming visible
  - 0.3 - Potions can now be stacked
- 
