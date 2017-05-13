@@ -138,7 +138,7 @@ minetest.register_craft( {
 
 
 -- invisibility function
-toggle_invisible = function(player, toggle)
+local toggle_invisible = function(player, toggle)
 
 	if not player then return false end
 
