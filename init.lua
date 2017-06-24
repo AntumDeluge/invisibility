@@ -1,7 +1,7 @@
 
 invisibility = {}
 
-local effect_time = 300 -- 5 minutes
+local effect_time = 180 -- 3 minutes
 
 -- reset player invisibility if they go offline
 
@@ -119,7 +119,14 @@ minetest.register_node("invisibility:potion", {
 minetest.register_craft( {
 	output = "invisibility:potion",
 	type = "shapeless",
-	recipe = {"default:nyancat_rainbow", "vessels:glass_bottle"},
+	recipe = {
+		"default:sapling", "default:junglesapling",
+		"default:pine_sapling", "default:acacia_sapling",
+		"default:aspen_sapling", "default:bush_sapling",
+		"default:acacia_bush_sapling",
+		"vessels:glass_bottle", "flowers:mushroom_red",
+		
+	},
 })
 
 -- invisibility function
