@@ -146,7 +146,7 @@ invisible = function(player, toggle)
 		-- hide player and name tag
 		prop = {
 			visual_size = {x = 0, y = 0},
-			collisionbox = {0, 0, 0, 0, 0, 0}
+--			collisionbox = {0, 0, 0, 0, 0, 0}
 		}
 
 		player:set_nametag_attributes({
@@ -156,7 +156,7 @@ invisible = function(player, toggle)
 		-- show player and tag
 		prop = {
 			visual_size = {x = 1, y = 1},
-			collisionbox = {-0.35, -1, -0.35, 0.35, 1, 0.35}
+--			collisionbox = {-0.35, -1, -0.35, 0.35, 1, 0.35}
 		}
 
 		player:set_nametag_attributes({
