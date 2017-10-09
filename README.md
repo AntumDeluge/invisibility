@@ -15,3 +15,4 @@ Changelog:
  - 0.2 - Added error checking and a 10 second warning before becoming visible
  - 0.3 - Potions can now be stacked
  - 0.4 - Potion recipe changed now that Nyan Cat no longer in default game
+ - 0.5 - Use newer functions, Minetest 0.4.16 and anove needed to run
